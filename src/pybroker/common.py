@@ -33,6 +33,7 @@ _tf_abbr: Final = {
     "h": "hour",
     "d": "day",
     "w": "week",
+    "mo": "month",
 }
 _CENTS: Final = Decimal(".01")
 
@@ -263,6 +264,7 @@ def parse_timeframe(timeframe: str) -> list[tuple[int, str]]:
     - ``"h"``/``"hour"``: hours
     - ``"d"``/``"day"``: days
     - ``"w"``/``"week"``: weeks
+    - ``"mo"``/``"month"``: months
 
     An example timeframe string is ``1h 30m``.
 
@@ -272,6 +274,7 @@ def parse_timeframe(timeframe: str) -> list[tuple[int, str]]:
         ``hour``, ``day``, ``week``.
     """
     parts = _tf_pattern.findall(timeframe)
+    print (parts)
     if not parts or len(parts) != len(timeframe.split()):
         raise ValueError("Invalid timeframe format.")
     result = []
@@ -299,6 +302,7 @@ def to_seconds(timeframe: Optional[str]) -> int:
     - ``"h"``/``"hour"``: hours
     - ``"d"``/``"day"``: days
     - ``"w"``/``"week"``: weeks
+    - ``"mo"``/``"month"``: months
 
     An example timeframe string is ``1h 30m``.
 
@@ -313,6 +317,7 @@ def to_seconds(timeframe: Optional[str]) -> int:
         "hour": 60 * 60,
         "day": 24 * 60 * 60,
         "week": 7 * 24 * 60 * 60,
+        "month": 30 * 24 * 60 * 60,
     }
     return sum(
         part[0] * seconds[part[1]] for part in parse_timeframe(timeframe)

@@ -59,7 +59,7 @@ class DataSourceCacheMixin:
                 - ``"h"``/``"hour"``: hours
                 - ``"d"``/``"day"``: days
                 - ``"w"``/``"week"``: weeks
-
+                - ``"mo"``/``"month"``: months
 
                 An example timeframe string is ``1h 30m``.
             start_date: Starting date of the cached data (inclusive).
@@ -128,6 +128,7 @@ class DataSourceCacheMixin:
                 - ``"h"``/``"hour"``: hours
                 - ``"d"``/``"day"``: days
                 - ``"w"``/``"week"``: weeks
+                - ``"mo"``/``"month"``: months
 
                 An example timeframe string would be ``1h 30m``.
             start_date: Starting date of the data to cache (inclusive).
@@ -192,6 +193,7 @@ class DataSource(ABC, DataSourceCacheMixin):
                 - ``"h"``/``"hour"``: hours
                 - ``"d"``/``"day"``: days
                 - ``"w"``/``"week"``: weeks
+                - ``"mo"``/``"month"``: months
 
                 An example timeframe string is ``1h 30m``.
             adjust: The type of adjustment to make.
@@ -275,6 +277,7 @@ class DataSource(ABC, DataSourceCacheMixin):
                 - ``"h"``/``"hour"``: hours
                 - ``"d"``/``"day"``: days
                 - ``"w"``/``"week"``: weeks
+                - ``"mo"``/``"month"``: months
 
                 An example timeframe string is ``1h 30m``.
             adjust: The type of adjustment to make.
@@ -308,7 +311,10 @@ def _parse_alpaca_timeframe(
         unit = TimeFrameUnit.Day
     elif tf[1] == "week":
         unit = TimeFrameUnit.Week
+    elif tf[1] == "month":
+        unit = TimeFrameUnit.Month      
     else:
+        print(tf[1])
         raise ValueError(f"Invalid Alpaca timeframe: {timeframe}")
     return tf[0], unit
 

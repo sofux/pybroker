@@ -1,34 +1,31 @@
 """Simple script that uses pybroker to pull TSLA data from Alpaca.
 
 Usage:
-1. Copy `secrets_example.py` to `secrets.py` and fill your Alpaca keys, or set
-   environment variables `ALPACA_API_KEY` and `ALPACA_API_SECRET`.
+1. Copy `secrets_example.py` to `secrets.py` and fill your Alpaca keys.
 2. Activate your virtualenv where `pybroker` and `alpaca-py` are installed.
 3. Run: `python kuyi_simulator.py`
 """
 
 from __future__ import annotations
-
-import os
 from datetime import datetime
-from typing import Optional
-
-try:
-	# Prefer a local secrets.py (ignored by git)
-	import secrets as local_secrets  # type: ignore
-except Exception:
-	local_secrets = None
-
 from pybroker import Alpaca
 
+try:
+	# Require a local secrets.py (ignored by git). Copy secrets_example.py -> secrets.py
+	import secrets as local_secrets  # type: ignore
+except Exception as exc:
+	raise RuntimeError(
+		"secrets.py not found. Copy secrets_example.py to secrets.py and set ALPACA_API_KEY and ALPACA_API_SECRET"
+	) from exc
 
-def get_alpaca_creds() -> tuple[Optional[str], Optional[str]]:
-	if local_secrets is not None:
-		api_key = getattr(local_secrets, "ALPACA_API_KEY", None)
-		api_secret = getattr(local_secrets, "ALPACA_API_SECRET", None)
-	else:
-		api_key = os.environ.get("ALPACA_API_KEY")
-		api_secret = os.environ.get("ALPACA_API_SECRET")
+
+def get_alpaca_creds() -> tuple[str, str]:
+	api_key = getattr(local_secrets, "ALPACA_API_KEY", None)
+	api_secret = getattr(local_secrets, "ALPACA_API_SECRET", None)
+	if not api_key or not api_secret:
+		raise RuntimeError(
+			"ALPACA_API_KEY and ALPACA_API_SECRET must be set in secrets.py."
+		)
 	return api_key, api_secret
 
 
